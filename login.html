@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Login - Smart Workout Planner</title>
+
+    <style>
+      body {
+        font-family: Arial;
+        color: black;
+        background: url("/home/iamnynvk/Downloads/pexels-foadshariyati-29392546.jpg")
+          no-repeat center center/cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .box {
+        background-color: gray;
+        padding: 30px;
+        border-radius: 15px;
+        width: 400px;
+        box-shadow: 0 10px 30px rgba(23, 34, 23, 0.4);
+        text-align: center;
+        color: black;
+      }
+
+      h2 {
+        margin-bottom: 15px;
+      }
+
+      input {
+        width: 95%;
+        padding: 12px;
+        margin-top: 15px;
+        border: none;
+        border-radius: 8px;
+        outline: none;
+        font-size: 14px;
+      }
+
+      input::placeholder {
+        color: #888;
+      }
+
+      input:focus {
+        box-shadow: 0 0 8px black;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 18px;
+        background: black;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        background: #1b257c;
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="box">
+      <h2>Login</h2>
+      <input type="text" id="username" placeholder="Enter Name" />
+      <button onclick="login()">Login</button>
+    </div>
+
+    <script>
+      function login() {
+        let name = document.getElementById("username").value;
+
+        if (name.trim() === "") {
+          alert("Please enter your name");
+          return;
+        }
+
+        localStorage.setItem("user", name);
+
+        window.location.href = "workoutPlan.html";
+      }
+    </script>
+  </body>
+</html>
