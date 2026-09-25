@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Smart Workout Planner Pro</title>
+
+    <style>
+      body {
+        font-family: Arial;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+          url("/home/iamnynvk/Downloads/jonathan-borba-lrQPTQs7nQQ-unsplash.jpg")
+            no-repeat center center/cover;
+        margin: 0;
+        color: white;
+      }
+
+      .container {
+        max-width: 500px;
+        margin: 50px auto;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        color: #333;
+      }
+
+      h2 {
+        text-align: center;
+        color: #007bff;
+      }
+      input,
+      select,
+      button {
+        width: 95%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        outline: none;
+        transition: 0.3s;
+      }
+      input:focus,
+      select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        margin: 8px 0;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: bold;
+        transition: 0.3s;
+      }
+      button:nth-child(5) {
+        background: #28a745;
+        color: white;
+      }
+
+      button:nth-child(5):hover {
+        background: #218838;
+      }
+
+      button:nth-child(6) {
+        background: #17a2b8;
+        color: white;
+      }
+      button:nth-child(7) {
+        background: #dc3545;
+        color: white;
+      }
+
+      button:nth-child(7):hover {
+        background: #c82333;
+      }
+
+      .result {
+        margin-top: 20px;
+        background: #f1f3f5;
+        padding: 15px;
+        border-radius: 10px;
+        color: #333;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h2>Smart Workout Planner</h2>
+
+      <input
+        type="number"
+        id="currentWeight"
+        placeholder="Current Weight (kg)"
+      />
+      <input type="number" id="targetWeight" placeholder="Target Weight (kg)" />
+
+      <select id="goal">
+        <option value="">Select Goal</option>
+        <option value="weight_loss">Weight Loss</option>
+        <option value="muscle_gain">Muscle Gain</option>
+        <option value="fitness">Fitness</option>
+      </select>
+
+      <button onclick="generatePlan()">Generate Plan</button>
+      <button onclick="saveData()">Save Progress</button>
+      <button onclick="logout()">Logout</button>
+
+      <div class="result" id="result"></div>
+    </div>
+
+    <script>
+      let user = "";
+
+      // 🔹 same login storage used
+      user = localStorage.getItem("user");
+
+      // LOGIN CHECK (same logic, no change)
+      if (!user) {
+        window.location.href = "login.html";
+      }
+
+      function generatePlan() {
+        let current = parseFloat(
+          document.getElementById("currentWeight").value,
+        );
+        let target = parseFloat(document.getElementById("targetWeight").value);
+        let goal = document.getElementById("goal").value;
+
+        if (!current || !target || !goal) {
+          document.getElementById("result").innerHTML =
+            "Please fill all fields";
+          return;
+        }
+
+        let diff = current - target;
+        let weeks = Math.ceil(Math.abs(diff));
+
+        let plan = `<h3>📊 Your Plan</h3>
+<p><b>Weight Change:</b> ${diff} kg</p>
+<p><b>Estimated Time:</b> ${weeks} weeks</p>`;
+
+        if (goal === "weight_loss") {
+          plan += `
+  <h4>🔥 Weekly Plan</h4>
+  <ul>
+    <li>Cardio: ${30 + diff * 2} mins/day</li>
+    <li>HIIT: ${10 + diff} mins/day</li>
+    <li>Steps Target: ${8000 + diff * 500} steps/day</li>
+    <li>Water Intake: 3-4 Liters/day</li>
+  </ul>
+
+  <h4>🥗 Diet Plan</h4>
+  <ul>
+    <li>Breakfast: Oats / Fruits</li>
+    <li>Lunch: Roti + Sabzi + Salad</li>
+    <li>Dinner: Soup / Salad</li>
+    <li>Avoid: Sugar, Junk Food</li>
+  </ul>
+
+  <h4>💡 Tips</h4>
+  <ul>
+    <li>Sleep 7-8 hours</li>
+    <li>Walk after meals</li>
+  </ul>
+  `;
+        }
+
+        if (goal === "muscle_gain") {
+          plan += `
+  <h4>💪 Workout Plan</h4>
+  <ul>
+    <li>Weight Training: 5 days/week</li>
+    <li>Cardio: 10-15 mins</li>
+    <li>Rest: 2 days/week</li>
+  </ul>
+
+  <h4>🥗 Diet Plan</h4>
+  <ul>
+    <li>Protein: ${(current * 1.5).toFixed(1)}g/day</li>
+    <li>Foods: Eggs, Milk, Paneer, Chicken</li>
+    <li>Carbs: Rice, Roti</li>
+  </ul>
+
+  <h4>💡 Tips</h4>
+  <ul>
+    <li>Increase weights gradually</li>
+    <li>Proper rest is important</li>
+  </ul>
+  `;
+        }
+
+        if (goal === "fitness") {
+          plan += `
+  <h4>🏃 Routine</h4>
+  <ul>
+    <li>Jogging: 20-30 mins</li>
+    <li>Yoga: 15 mins</li>
+    <li>Stretching: Daily</li>
+  </ul>
+
+  <h4>🥗 Diet Plan</h4>
+  <ul>
+    <li>Balanced diet</li>
+    <li>Fruits & Vegetables</li>
+    <li>Drink enough water</li>
+  </ul>
+
+  <h4>💡 Tips</h4>
+  <ul>
+    <li>Stay consistent</li>
+    <li>Avoid junk food</li>
+  </ul>
+  `;
+        }
+
+        document.getElementById("result").innerHTML = plan;
+      }
+
+      function saveData() {
+        let current = document.getElementById("currentWeight").value;
+        let target = document.getElementById("targetWeight").value;
+
+        if (!current || !target) {
+          alert("Enter weights first");
+          return;
+        }
+
+        let data = JSON.parse(localStorage.getItem("progress")) || [];
+
+        data.push({
+          name: user,
+          currentWeight: current,
+          targetWeight: target,
+          date: new Date().toLocaleString(),
+        });
+
+        localStorage.setItem("progress", JSON.stringify(data));
+
+        alert("Progress Saved!");
+
+        loadProgress();
+      }
+
+      function loadProgress() {
+        let data = JSON.parse(localStorage.getItem("progress")) || [];
+
+        let output = "";
+
+        data.forEach((d) => {
+          if (d.name === user) {
+            output += `<p>${d.date} → ${d.currentWeight}kg to ${d.targetWeight}kg</p>`;
+          }
+        });
+
+        document.getElementById("progress").innerHTML = output || "No data yet";
+      }
+
+      function logout() {
+        localStorage.removeItem("user");
+        localStorage.removeItem("progress");
+        location.reload();
+      }
+    </script>
+  </body>
+</html>
